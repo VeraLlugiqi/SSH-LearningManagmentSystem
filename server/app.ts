@@ -21,7 +21,8 @@ origin:process.env.ORIGIN
 // routes
 app.use(
     "/api/v1",
-    userRouter
+    userRouter,
+    
   );
   
 //testing api
