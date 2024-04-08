@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import NavItems from "../utils/NavItems";
