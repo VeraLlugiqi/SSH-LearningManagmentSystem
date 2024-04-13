@@ -36,21 +36,21 @@ Projekti ynë përdor migrate-mongo për menaxhimin e migrimeve të bazës së t
       
       Konfigurimi i migrate-mongo është vendosur në skedarin `config.js`. Ky skedar përmban konfigurimet e nevojshme për lidhjen me bazën e të dhënave MongoDB dhe menaxhimin e migrimeve. Në këtë skedar, kemi përcaktuar:
 
-   - **URL-në për lidhjen me MongoDB**: Për të siguruar lidhjen me bazën e të dhënave për migrime.
-   - **Emrin e bazës së të dhënave**: Emrin e bazës së të dhënave në MongoDB.
-   - **Opsionet shtesë**: Për të përcaktuar opsione të ndryshme për lidhjen me MongoDB.
-   - **Direktorinë e migrimeve**: Ku ruhen skriptet e migrimeve.
-   - **Emrin e koleksionit të ndryshimeve**: Emrin e koleksionit në MongoDB ku ruhen ndryshimet e aplikuar.
-   - **Zgjatjen e skripteve të migrimit**: Tipin e skripteve të migrimit (p.sh. .js).
-   - **Aktivizimin e algoritmit për të krijuar një checksum**: Për të përcaktuar nëse të përdoret algoritmi për të kontrolluar përmbajtjen e skripteve të migrimit.
-   - **Sistemin e modulit**: Llojin e modulit të përdorur në migrime (p.sh. commonjs).
+      - **URL-në për lidhjen me MongoDB**: Për të siguruar lidhjen me bazën e të dhënave për migrime.
+      - **Emrin e bazës së të dhënave**: Emrin e bazës së të dhënave në MongoDB.
+      - **Opsionet shtesë**: Për të përcaktuar opsione të ndryshme për lidhjen me MongoDB.
+      - **Direktorinë e migrimeve**: Ku ruhen skriptet e migrimeve.
+      - **Emrin e koleksionit të ndryshimeve**: Emrin e koleksionit në MongoDB ku ruhen ndryshimet e aplikuar.
+      - **Zgjatjen e skripteve të migrimit**: Tipin e skripteve të migrimit (p.sh. .js).
+      - **Aktivizimin e algoritmit për të krijuar një checksum**: Për të përcaktuar nëse të përdoret algoritmi për të kontrolluar përmbajtjen e skripteve të migrimit.
+      - **Sistemin e modulit**: Llojin e modulit të përdorur në migrime (p.sh. commonjs).
    
    2. **Implementimi i Migrimeve**
    
       Skriptet e migrimit janë të vendosura në direktorinë e caktuar, siç është specifikuar në konfigurimin tonë. Secila migrim përmban dy funksione:
       
-      up: Kjo funksion zbatohet për të kryer ndryshimet në bazën e të dhënave. Në shembullin tonë, ne përdorim funksionin për të ndryshuar emrin e fushës "Name" në "fullName" në koleksionin "users".
+      up: Ky funksion zbatohet për të kryer ndryshimet në bazën e të dhënave. Në shembullin tonë, ne përdorim funksionin për të ndryshuar emrin e fushës "Name" në "fullName" në koleksionin "users".
       
-      down: Kjo funksion përmban ndryshimet për të kthyer migrimin prapa në gjendjen fillestare, nëse është e mundur. Në rastin tonë, kthejmë emrin e fushës "fullName" në "Name".
+      down: Ky funksion përmban ndryshimet për të kthyer migrimin prapa në gjendjen fillestare, nëse është e mundur. Në rastin tonë, kthejmë emrin e fushës "fullName" në "Name".
 
 
