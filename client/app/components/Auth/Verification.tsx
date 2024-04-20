@@ -4,10 +4,6 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { useSelector } from "react-redux";
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 type Props = {
   setRoute: (route: string) => void;
