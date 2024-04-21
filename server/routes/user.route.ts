@@ -11,7 +11,7 @@ userRouter.post("/login", loginUser);
 
 userRouter.get("/logout", isAutheticated, authorizeRoles("admin"), logoutUser);
 
-userRouter.get("/refresh", updateAccessToken);
+userRouter.get("/refresh-token", updateAccessToken);
 
 userRouter.get("/me", isAutheticated, getUserInfo);
 
