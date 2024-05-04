@@ -7,6 +7,7 @@ import { ErrorMiddleware } from "./middleware/error";
 import { Request, Response } from 'express';
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
+import orderRouter from "./routes/order.route";
 
 //body parser
 
@@ -23,10 +24,9 @@ credentials:true
 // routes
 app.use(
     "/api/v1",
-    userRouter,
+    userRouter, orderRouter, courseRouter
     
 );
-app.use("/api/v1", courseRouter);
 //testing api
 
 app.get("/test",(req:Request,res:Response,next:NextFunction)=>{
