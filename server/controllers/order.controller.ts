@@ -65,7 +65,7 @@ export const createOrder = CatchAsyncError(async (req:Request, res:Response, nex
         await NotificationModel.create({
             user: user?._id,
             title:"New Order",
-            message: `You have a new order from $(course?.name)`,
+            message: `You have a new order from ${course?.name}`,
         });
        
         if (course && typeof course.purchased === 'number') {
