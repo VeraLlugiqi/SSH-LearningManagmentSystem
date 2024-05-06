@@ -14,7 +14,7 @@ import {
 } from "../utils/jwt";
 import { redis } from "../utils/redis";
 
-import { getUserById,getAllUsersService } from "../services/user.service";
+import { getUserById,getAllUsersService, updateUserRoleService } from "../services/user.service";
 import cloudinary from "cloudinary";
 // register user
 interface IRegistrationBody {
@@ -437,3 +437,16 @@ export const getAllUsers = CatchAsyncError(
     }
   }
 );
+
+//update user role - vetem per admin
+export const updateUserRole = CatchAsyncError( 
+  async (req: Request, res: Response, next: NextFunction)=>{
+    try{
+
+      const {id, role} = req.body;
+      updateUserRoleService(res,id,role);
+    }catch(error: any){
+      return next(new ErrorHandler(error.message,400));
+    }
+  }
+)
