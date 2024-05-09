@@ -5,7 +5,7 @@ import SideBarProfile from "./SideBarProfile";
 import { useLogOutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
-// import ChangePassword from "./ChangePassword";
+import ChangePassword from "./ChangePassword";
 // import CourseCard from "../Course/CourseCard";
 // import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 
@@ -17,7 +17,7 @@ const Profile: FC<Props> = ({ user }) => {
   const [scroll, setScroll] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [logout, setLogout] = useState(false);
-  const [courses, setCourses] = useState([]);
+  //const [courses, setCourses] = useState([]);
   //const { data, isLoading } = useGetUsersAllCoursesQuery(undefined, {});
 
   const {} = useLogOutQuery(undefined, {
@@ -72,14 +72,14 @@ const Profile: FC<Props> = ({ user }) => {
           <ProfileInfo avatar={avatar} user={user} />
         </div>
       )}
-{/* 
+
       {active === 2 && (
         <div className="w-full h-full bg-transparent mt-[80px]">
           <ChangePassword />
         </div>
       )}
 
-      {active === 3 && (
+      {/* {active === 3 && (
         <div className="w-full pl-7 px-2 800px:px-10 800px:pl-8 mt-[80px]">
           <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0">
             {courses &&

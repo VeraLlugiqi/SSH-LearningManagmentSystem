@@ -45,7 +45,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     }
     if(success){
       toast.success("Profile updated successfully!");
-      setLoadUser(true);
+      //setLoadUser(true);
     }
   }, [isSuccess, error,success, updateError]);
 
