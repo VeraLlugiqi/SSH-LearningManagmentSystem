@@ -6,6 +6,10 @@ import { ThemeProvider } from "./utils/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./Provider";
 import { SessionProvider } from "next-auth/react";
+import React, { FC, useEffect } from "react";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./components/Loader/Loader";
+//import socketIO from "socket.io-client";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +38,9 @@ export default function RootLayout({
         <Providers>
           <SessionProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
+            <Custom>
+                <div>{children}</div>
+            </Custom>
             </ThemeProvider>
           </SessionProvider>
         </Providers>
@@ -42,3 +48,13 @@ export default function RootLayout({
     </html>
   );
 }
+
+const Custom: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isLoading } = useLoadUserQuery({});
+
+  // useEffect(() => {
+  //   socketIO.on("connection", () => {});
+  // }, []);
+
+  return <div>{isLoading ? <Loader /> : <div>{children} </div>}</div>;
+};
