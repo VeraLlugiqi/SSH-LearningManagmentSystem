@@ -47,6 +47,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ name, email, password }) => {
+      console.log("Submitting form...");
       const data={
         name,email,password
       };
