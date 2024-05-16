@@ -1,4 +1,4 @@
-import { apiSlice } from "../api/apiSlice";
+import { apiSlice } from "../../api/apiSlice";
 import { userLoggedIn, userLoggedOut, userRegistration } from "./authSlice";
 
 type RegistrationResponse = {

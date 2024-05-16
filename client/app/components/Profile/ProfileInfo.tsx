@@ -8,7 +8,7 @@ import {
   useEditProfileMutation,
   useUpdateAvatarMutation,
 } from "@/redux/features/user/userApi";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import { useLoadUserQuery } from "@/redux/api/apiSlice";
 import { toast } from "react-hot-toast";
 
 type Props = {
