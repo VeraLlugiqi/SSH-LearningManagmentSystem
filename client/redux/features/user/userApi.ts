@@ -60,7 +60,7 @@ export const {
   useUpdateAvatarMutation,
   useEditProfileMutation,
   useUpdatePasswordMutation,
-  useGetAllUsersQuery,
+  useGetAllUsersQuery, 
   useUpdateUserRoleMutation,
   useDeleteUserMutation
 } = userApi;
