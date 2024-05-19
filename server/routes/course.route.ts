@@ -1,5 +1,5 @@
 import express from "express";
-import { uploadCourse, editCourse ,getSingleCourse, getAllCourses,getCourseByUser, addQuestion, addAnswer, addReview, addReplyToReview, deleteCourse, generateVideoUrl} from "../controllers/course.controller";
+import { uploadCourse, editCourse, getSingleCourse, getAllCourses, getCourseByUser, addQuestion, addAnswer, addReview, addReplyToReview, deleteCourse, generateVideoUrl, getAdminAllCourses } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { updateAccessToken } from "../controllers/user.controller";
 const courseRouter = express.Router();
@@ -24,39 +24,41 @@ courseRouter.get("/get-course/:id", getSingleCourse);
 
 courseRouter.get("/get-courses", getAllCourses);
 
+courseRouter.get("/get-admin-courses", isAutheticated, authorizeRoles("admin"), getAdminAllCourses);
+
 courseRouter.get("/get-course-content/:id", updateAccessToken, isAutheticated, getCourseByUser);
 
 courseRouter.put(
-    "/add-question", 
+    "/add-question",
     updateAccessToken,
-    isAutheticated, 
+    isAutheticated,
     addQuestion);
 
 courseRouter.put(
-    "/add-answer", 
+    "/add-answer",
     updateAccessToken,
-    isAutheticated, 
+    isAutheticated,
     addAnswer);
 
 courseRouter.put(
     "/add-review/:id",
     updateAccessToken,
-    isAutheticated, 
-    addReview);    
+    isAutheticated,
+    addReview);
 
 courseRouter.put(
     "/add-reply",
     updateAccessToken,
     isAutheticated,
-    authorizeRoles("admin"), 
-    addReplyToReview);     
-    
+    authorizeRoles("admin"),
+    addReplyToReview);
+
 courseRouter.get(
     "/get-admin-courses",
     updateAccessToken,
     isAutheticated,
-    authorizeRoles("admin"), 
-    getAllCourses);       
+    authorizeRoles("admin"),
+    getAllCourses);
 
 courseRouter.post(
     "/getVdoCipherOTP",
@@ -68,8 +70,8 @@ courseRouter.delete(
     "/delete-course/:id",
     updateAccessToken,
     isAutheticated,
-    authorizeRoles("admin"), 
-    deleteCourse);       
+    authorizeRoles("admin"),
+    deleteCourse);
 
 
 export default courseRouter;
