@@ -20,22 +20,24 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
       .then((res) => {
         setVideoData(res.data);
       });
-  }, [videoUrl]); //everytime videourl comes refetch it
+
+  }, [videoUrl]);
 
   return (
-    <div
-      style={{ position: "relative", paddingTop: "56.25%", overflow: "hidden" }}
-    >
+    <div style={{position:"relative",paddingTop:"56.25%",overflow:"hidden"}}>
       {videoData.otp && videoData.playbackInfo !== "" && (
         <iframe
-          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=MhwLLpAHuCtHIQFy`}
+          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=Ub9OiZXIOeUXH0Nv`}
+
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            border: 0,
+
+            border: 0
+
           }}
           allowFullScreen={true}
           allow="encrypted-media"
@@ -45,4 +47,6 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
   );
 };
 
+
 export default CoursePlayer;
+

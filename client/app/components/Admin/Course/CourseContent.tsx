@@ -218,8 +218,10 @@ const handleCollapseToggle = (index: number) => {
                         }}
                         />
                         </div>
-                        <div className="mb-3">
-                        <label className={styles.label}>Video Url</label>
+
+                    <div className="mb-3">
+                      <label className={styles.label}>Video Url</label>
+
                         <input
                             type="text"
                             placeholder="sdder"
@@ -233,6 +235,22 @@ const handleCollapseToggle = (index: number) => {
                         />
                     </div>
                     <div className="mb-3">
+
+                      <label className={styles.label}>Video Length (in minutes)</label>
+                      <input
+                        type="number"
+                        placeholder="20"
+                        className={`${styles.input}`}
+                        value={item.videoLength}
+                        onChange={(e) => {
+                          const updatedData = [...courseContentData];
+                          updatedData[index].videoLength = e.target.value;
+                          setCourseContentData(updatedData);
+                        }}
+                      />
+                    </div>
+                    <div className="mb-3">
+
                         <label className={styles.label}>Video Description</label>
                         <textarea
                             rows={8}
@@ -319,8 +337,10 @@ const handleCollapseToggle = (index: number) => {
                 )};
                     </div>
                     </>
-                    );
-        })};
+
+                    )
+        })}
+
         <br/>
         <div
             className="flex items-center text-[20px] dark:text-white text-black cursor-pointer"
