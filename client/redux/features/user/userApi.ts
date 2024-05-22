@@ -1,4 +1,4 @@
-import { apiSlice } from "../api/apiSlice";
+import { apiSlice } from "../../api/apiSlice";
 
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -60,7 +60,7 @@ export const {
   useUpdateAvatarMutation,
   useEditProfileMutation,
   useUpdatePasswordMutation,
-  useGetAllUsersQuery,
+  useGetAllUsersQuery, 
   useUpdateUserRoleMutation,
   useDeleteUserMutation
 } = userApi;

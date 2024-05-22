@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Providers } from "./Provider";
 import { SessionProvider } from "next-auth/react";
 import React, { FC, useEffect } from "react";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import { useLoadUserQuery } from "@/redux/api/apiSlice";
 import Loader from "./components/Loader/Loader";
 //import socketIO from "socket.io-client";
 
