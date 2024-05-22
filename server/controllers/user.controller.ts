@@ -198,64 +198,64 @@ export const logoutUser = CatchAsyncError(
 );
 
 
-// update access token
-export const updateAccessToken = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const refresh_token = req.cookies.refresh_token as string;
-      const decoded = jwt.verify(
-        refresh_token,
-        process.env.REFRESH_TOKEN as string
-      ) as JwtPayload;
+// // update access token
+// export const updateAccessToken = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const refresh_token = req.cookies.refresh_token as string;
+//       const decoded = jwt.verify(
+//         refresh_token,
+//         process.env.REFRESH_TOKEN as string
+//       ) as JwtPayload;
 
-      const message = "Could not refresh token";
-      if (!decoded) {
-        return next(new ErrorHandler(message, 400));
-      }
-      const session = await redis.get(decoded.id as string);
+//       const message = "Could not refresh token";
+//       if (!decoded) {
+//         return next(new ErrorHandler(message, 400));
+//       }
+//       const session = await redis.get(decoded.id as string);
 
-      if (!session) {
-        return next(
-          new ErrorHandler("Please login for access this resources!", 400)
-        );
-      }
+//       if (!session) {
+//         return next(
+//           new ErrorHandler("Please login for access this resources!", 400)
+//         );
+//       }
 
-      const user = JSON.parse(session);
+//       const user = JSON.parse(session);
 
-      const accessToken = jwt.sign(
-        { id: user._id },
-        process.env.ACCESS_TOKEN as string,
-        {
-          expiresIn: "5m",
-        }
-      );
+//       const accessToken = jwt.sign(
+//         { id: user._id },
+//         process.env.ACCESS_TOKEN as string,
+//         {
+//           expiresIn: "5m",
+//         }
+//       );
 
-      const refreshToken = jwt.sign(
-        { id: user._id },
-        process.env.REFRESH_TOKEN as string,
-        {
-          expiresIn: "3d",
-        }
-      );
+//       const refreshToken = jwt.sign(
+//         { id: user._id },
+//         process.env.REFRESH_TOKEN as string,
+//         {
+//           expiresIn: "3d",
+//         }
+//       );
 
-      req.user = user;
+//       req.user = user;
 
-      res.cookie("access_token", accessToken, accessTokenOptions);
-      res.cookie("refresh_token", refreshToken, refreshTokenOptions);
+//       res.cookie("access_token", accessToken, accessTokenOptions);
+//       res.cookie("refresh_token", refreshToken, refreshTokenOptions);
 
-      // res.status(200).json({
-      //   status:"success",
-      //   accessToken,
-      // })
+//       // res.status(200).json({
+//       //   status:"success",
+//       //   accessToken,
+//       // })
 
-      await redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7days
+//       await redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7days
 
-      return next();
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
-    }
-  }
-);
+//       return next();
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 400));
+//     }
+//   }
+// );
 
 // get user info
 export const getUserInfo = CatchAsyncError(
