@@ -10,7 +10,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../../app/styles/style";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
-import toast from "react-hot-toast";
+import {toast} from "react-hot-toast";
 import {signIn} from "next-auth/react";
 
 type Props = {
@@ -28,7 +28,7 @@ const schema = Yup.object().shape({
 
 const Login: FC<Props> = ({ setRoute,setOpen }) => {
   const [show, setShow] = useState(false);
-  const [login, { isSuccess,isError, error }] = useLoginMutation();
+  const [login, { isSuccess, error }] = useLoginMutation();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
@@ -134,7 +134,5 @@ const Login: FC<Props> = ({ setRoute,setOpen }) => {
 };
 
 export default Login;
-function setOpen(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
+
 

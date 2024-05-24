@@ -1,4 +1,4 @@
-import REact, {FC} from "react";
+import React, {FC} from "react";
 
 interface HeadProps{
  title: string;

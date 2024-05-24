@@ -11,7 +11,7 @@ import {
 import Loader from "../../Loader/Loader";
 import { format } from "timeago.js";
 import { styles } from "@/app/styles/style";
-import toast from "react-hot-toast";
+import {toast} from "react-hot-toast";
 import { Link } from 'react-router-dom';
 
 
@@ -52,10 +52,6 @@ const AllCourses = (props: Props) => {
       headerName: "Delete",
       flex: 0.2,
       renderCell: (params: any) => {
-        function setUserId(id: any) {
-          throw new Error("Function not implemented.");
-        }
-
         return (
           <>
             <Button
@@ -204,6 +200,3 @@ const AllCourses = (props: Props) => {
 };
 
 export default AllCourses;
-function refetch() {
-  throw new Error("Function not implemented.");
-}
