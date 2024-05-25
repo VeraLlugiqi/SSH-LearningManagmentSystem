@@ -36,4 +36,16 @@ export const coursesApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useCreateCourseMutation, useGetAllCoursesQuery, useDeleteCourseMutation, useEditCourseMutation } = coursesApi;
+export const {
+    useCreateCourseMutation,
+    useGetAllCoursesQuery,
+    useDeleteCourseMutation,
+    useEditCourseMutation,
+    useGetUsersAllCoursesQuery,
+    useGetCourseDetailsQuery,
+    useGetCourseContentQuery,
+    useAddNewQuestionMutation,
+    useAddAnswerInQuestionMutation,
+    useAddReviewInCourseMutation,
+    useAddReplyInReviewMutation
+  } = coursesApi;
