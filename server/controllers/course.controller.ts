@@ -11,6 +11,7 @@ import path from "path";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notificationModel";
 import axios from "axios";
+// import { ILesson, ICertificate, IFeedback } from "../models/course.model";
 
 //upload 
 export const uploadCourse = CatchAsyncError(async (req:Request, res: Response, next:NextFunction)=>{
@@ -27,6 +28,9 @@ export const uploadCourse = CatchAsyncError(async (req:Request, res: Response, n
                 url: myCloud.secure_url
             }
         }
+        // const lessons: ILesson[] = data.lessons;
+        // const certificates: ICertificate[] = data.certificates;
+        // const feedbacks: IFeedback[] = data.feedbacks;
         createCourse(data,res,next);
     }
 
@@ -279,7 +283,7 @@ export const addAnswer = CatchAsyncError(async(req:Request, res:Response,next:Ne
     }
 
     //add this answer to our course content 
-    question.questionRepliess.push(newAnswer);
+    question.questionReplies.push(newAnswer);
 
     await course?.save();
 

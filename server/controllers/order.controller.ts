@@ -14,7 +14,7 @@ import { newOrder, getAllOrdersService } from "../services/order.service";
 //to create order
 export const createOrder = CatchAsyncError(async (req:Request, res:Response, next:NextFunction) => {
     try{
-        const {courseId,payment_info} = req.body as IOrder;
+        const {courseId,payment_info,shippingAddress,billingAddress} = req.body as IOrder;
 
         const user = await userModel.findById(req.user?._id);
         const courseExistsInUser = user?.courses.some((course:any) => course._id.toString() === courseId);//take care if this user is logged in before purchasing
@@ -31,6 +31,8 @@ export const createOrder = CatchAsyncError(async (req:Request, res:Response, nex
             courseId: course._id,
             userId:user?._id,
             payment_info,
+            shippingAddress,
+            billingAddress
         };
 
         

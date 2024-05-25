@@ -56,6 +56,19 @@ export const createLayout = CatchAsyncError(
           type: "Categories",
           categories: categoriesItems,
         });
+      } else if (type === "Reviews") {
+        const { reviews } = req.body;
+        const reviewsItems = await Promise.all(
+          reviews.map((item: any) => ({
+            name: item.name,
+            message: item.message,
+            position: item.position,
+          }))
+        );
+        await LayoutModel.create({
+          type: "Reviews",
+          reviews: reviewsItems,
+        });
       }
 
       res.status(200).json({
@@ -133,6 +146,22 @@ export const editLayout = CatchAsyncError(
           await LayoutModel.findByIdAndUpdate(categoriesData?._id, {
             type: "Categories",
             categories: categoriesItems,
+          });
+        }else if (type === "Reviews") {
+          const { reviews } = req.body;
+          const reviewsData = await LayoutModel.findOne({
+            type: "Reviews",
+          });
+          const reviewsItems = await Promise.all(
+            reviews.map((item: any) => ({
+              name: item.name,
+              message: item.message,
+              position: item.position,
+            }))
+          );
+          await LayoutModel.findByIdAndUpdate(reviewsData?._id, {
+            type: "Reviews",
+            reviews: reviewsItems,
           });
         }
   

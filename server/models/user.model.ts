@@ -5,6 +5,19 @@ import jwt from "jsonwebtoken";
 
 const emailRegexPattern: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+interface IAddress {
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+}
+
+interface IPhoneNumber {
+  countryCode: string;
+  number: string;
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -16,6 +29,8 @@ export interface IUser extends Document {
   role: string;
   isVerified: boolean;
   courses: Array<{ courseId: string }>;
+  address: IAddress;
+  phoneNumber: IPhoneNumber;
   comparePassword: (password: string) => Promise<boolean>;
   SignAccessToken: () => string;
   SignRefreshToken: () => string;
@@ -60,6 +75,23 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
         courseId: String,
       },
     ],
+    address: {
+      type: {
+        street: String,
+        city: String,
+        state: String,
+        country: String,
+        postalCode: String,
+      },
+      required: false,
+    },
+    phoneNumber: {
+      type: {
+        countryCode: String,
+        number: String,
+      },
+      required: false,
+    },
   },
   { timestamps: true }
 );

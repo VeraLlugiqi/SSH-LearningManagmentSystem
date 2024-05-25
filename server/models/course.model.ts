@@ -1,6 +1,22 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import { IUser } from "./user.model";
 
+interface ILesson extends Document {
+  title: string;
+  description: string;
+  content: string;
+}
+
+interface ICertificate extends Document {
+  title: string;
+}
+
+interface IFeedback extends Document {
+  user: IUser;
+  comment: string;
+  rating: number;
+}
+
 export interface IComment extends Document {
   user: IUser;
   question: string;
@@ -48,7 +64,26 @@ interface ICourseData extends Document {
   courseData: ICourseData[];
   ratings?: number;
   purchased: number;
+  lessons: ILesson[];
+  certificates: ICertificate[];
+  feedbacks: IFeedback[];
 }
+
+const lessonSchema = new Schema<ILesson>({
+  title: String,
+  description: String,
+  content: String,
+}, { timestamps: true });
+
+const certificateSchema = new Schema<ICertificate>({
+  title: String,
+}, { timestamps: true });
+
+const feedbackSchema = new Schema<IFeedback>({
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  comment: String,
+  rating: Number,
+}, { timestamps: true });
 
 const reviewSchema = new Schema<IReview>({
   user: Object,
@@ -136,6 +171,9 @@ const courseSchema = new Schema<ICourse>({
     type: Number,
     default: 0,
    },
+   lessons: [lessonSchema],
+   certificates: [certificateSchema],
+   feedbacks: [feedbackSchema],
 },{timestamps: true});
 
 
