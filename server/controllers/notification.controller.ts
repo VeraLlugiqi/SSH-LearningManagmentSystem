@@ -1,4 +1,4 @@
-import NotificationModel from "../models/notificationModel";
+import NotificationModel from "../models/notification.Model";
 import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";

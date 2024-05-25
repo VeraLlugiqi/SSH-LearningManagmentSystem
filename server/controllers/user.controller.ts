@@ -10,11 +10,11 @@ import sendMail from "../utils/sendMail";
 import {
   accessTokenOptions,
   refreshTokenOptions,
-  sendToken
+  sendToken,
 } from "../utils/jwt";
 import { redis } from "../utils/redis";
 
-import { getUserById,getAllUsersService, updateUserRoleService } from "../services/user.service";
+import { getUserById, getAllUsersService, updateUserRoleService } from "../services/user.service";
 import cloudinary from "cloudinary";
 // register user
 interface IRegistrationBody {
@@ -429,57 +429,57 @@ export const updateProfilePicture = CatchAsyncError(
 // get all users - vetem per admin
 
 export const getAllUsers = CatchAsyncError(
-  async ( req: Request, res: Response, next:NextFunction) => {
-    try{
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
       getAllUsersService(res);
-    } catch(error:any){
-      return next(new ErrorHandler(error.message,400));
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );
 
 //update user role - vetem per admin
-export const updateUserRole = CatchAsyncError( 
-  async (req: Request, res: Response, next: NextFunction)=>{
-    try{
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
 
-      const {email, role} = req.body;
+      const { email, role } = req.body;
       const isUserExist = await userModel.findOne({ email });
-      if(isUserExist){
-      const id = isUserExist._id;
-      updateUserRoleService(res,id,role);
+      if (isUserExist) {
+        const id = isUserExist._id;
+        updateUserRoleService(res, id, role);
       }
-      else{
+      else {
         res.status(400).json({
           success: false,
           message: "User not found",
         });
-      }  
-    }catch(error: any){
-      return next(new ErrorHandler(error.message,400));
+      }
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 )
 
 //delete user - vetem per admin
 export const deleteUser = CatchAsyncError(
-  async(req: Request, res:Response,next:NextFunction)=>{
-    try{
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
       const { id } = req.params;
       const user = await userModel.findById(id);
 
-      if(!user){
-        return next(new ErrorHandler("User not found",404));
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
       }
-      await user.deleteOne({id});
+      await user.deleteOne({ id });
       await redis.del(id);
 
       res.status(200).json({
-        success:true,
+        success: true,
         message: "User deleted successfully",
       });
-    }catch(error: any){
-      return next(new ErrorHandler(error.message,400));
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
 
-})
+  })
