@@ -17,9 +17,9 @@ export const uploadCourse = CatchAsyncError(async (req:Request, res: Response, n
     try{
         const data = req.body;
         const thumbnail = data.thumbnail;
-        if(thumbnail){
-            const myCloud = await cloudinary.v2.uploader.upload(thumbnail,{
-                folder:"courses"
+        if(thumbnail && thumbnail.url){
+          const myCloud = await cloudinary.v2.uploader.upload(thumbnail.url,{
+            folder:"courses"
             });
 
             data.thumbnail = {
@@ -48,7 +48,7 @@ export const editCourse = CatchAsyncError(
 
       const courseData = await CourseModel.findById(courseId) as any;
 
-      if (thumbnail && !thumbnail.startsWith("https")) {
+      if (typeof thumbnail === 'string' && !thumbnail.startsWith("https")) {
         await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
@@ -61,7 +61,7 @@ export const editCourse = CatchAsyncError(
         };
       }
 
-      if (thumbnail.startsWith("https")) {
+      if (typeof thumbnail === 'string' && thumbnail.startsWith("https")) {
         data.thumbnail = {
           public_id: courseData?.thumbnail.public_id,
           url: courseData?.thumbnail.url,
@@ -279,7 +279,7 @@ export const addAnswer = CatchAsyncError(async(req:Request, res:Response,next:Ne
     }
 
     //add this answer to our course content 
-    question.questionRepliess.push(newAnswer);
+    question.questionReplies.push(newAnswer);
 
     await course?.save();
 

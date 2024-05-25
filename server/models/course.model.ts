@@ -95,7 +95,7 @@ const courseSchema = new Schema<ICourse>({
   },
   categories:{
     type:String,
-    required: true,
+    // required: true,
   },
   price: {
     type: Number,
@@ -127,15 +127,15 @@ const courseSchema = new Schema<ICourse>({
   benefits: [{title: String}],
   prerequisites: [{title: String}],
   reviews: [reviewSchema],
-   courseData: [courseDataSchema],
-   ratings:{
-     type: Number,
-     default: 0,
-   },
-   purchased:{
+  courseData: [courseDataSchema],
+  ratings:{
     type: Number,
     default: 0,
-   },
+  },
+  purchased:{
+  type: Number,
+  default: 0,
+  },
 },{timestamps: true});
 
 
