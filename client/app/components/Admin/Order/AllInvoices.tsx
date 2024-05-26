@@ -22,7 +22,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
   const [orderData, setOrderData] = useState<any>([]);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.orders) {
       const temp = data.orders.map((item: any) => {
         const user = usersData?.users.find(
           (user: any) => user._id === item.userId

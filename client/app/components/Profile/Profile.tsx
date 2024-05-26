@@ -1,4 +1,3 @@
-
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import SideBarProfile from "./SideBarProfile";
@@ -6,8 +5,8 @@ import { useLogOutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
-// import CourseCard from "../Course/CourseCard";
-// import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import CourseCard from "../Course/CourseCard";
+import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 
 type Props = {
   user: any;
@@ -41,16 +40,16 @@ const Profile: FC<Props> = ({ user }) => {
     });
   }
 
- useEffect(() => {
+  useEffect(() => {
     if (data) {
       const filteredCourses = user.courses
-         .map((userCourse: any) =>
+        .map((userCourse: any) =>
           data.courses.find((course: any) => course._id === userCourse._id)
         )
-         .filter((course: any) => course !== undefined);
+        .filter((course: any) => course !== undefined);
       setCourses(filteredCourses);
-     }
-   }, [data]);
+    }
+  }, [data]);
 
   return (
     <div className="w-[85%] flex mx-auto">
