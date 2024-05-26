@@ -44,7 +44,7 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
       refetch();
     }
     audio.load();
-  }, [data, isSuccess,audio]);
+  }, [data, isSuccess, audio]);
 
   useEffect(() => {
     socketId.on("newNotification", (data) => {
@@ -55,6 +55,12 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
 
   const handleNotificationStatusChange = async (id: string) => {
     await updateNotificationStatus(id);
+  };
+
+  const handleToggleOpen = () => {
+    if (setOpen) {
+      setOpen((prevOpen: boolean) => !prevOpen);
+    }
   };
 
   return (

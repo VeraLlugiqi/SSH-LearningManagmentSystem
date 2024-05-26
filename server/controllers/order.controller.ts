@@ -39,6 +39,9 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         if (!course) {
             return next(new ErrorHandler("Course not found", 404));
         }
+      } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
+      }
 
         const data: any = {
             courseId: course._id,
@@ -71,7 +74,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
             return next(new ErrorHandler(error.message, 500));
         }
 
-        user?.courses.push(course?._id);
+      await course.save();
 
         await redis.set(req.user?._id, JSON.stringify(user));
 
@@ -94,7 +97,8 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 500));
     }
-})
+  }
+);
 export const getAllOrders = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
