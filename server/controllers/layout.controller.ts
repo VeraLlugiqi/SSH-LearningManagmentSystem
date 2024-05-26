@@ -58,19 +58,40 @@ export const createLayout = CatchAsyncError(
         });
       } else if (type === "Reviews") {
         const { reviews } = req.body;
-        const reviewsItems = await Promise.all(
-          reviews.map((item: any) => ({
-            name: item.name,
-            message: item.message,
-            position: item.position,
-          }))
-        );
-        await LayoutModel.create({
-          type: "Reviews",
-          reviews: reviewsItems,
-        });
+      
+        // Validate reviews
+        if (!reviews || !Array.isArray(reviews)) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid input: reviews must be a defined array",
+          });
+        }
+      
+        try {
+          const reviewsItems = await Promise.all(
+            reviews.map((item) => ({
+              name: item.name,
+              message: item.message,
+              position: item.position,
+            }))
+          );
+      
+          await LayoutModel.create({
+            type: "Reviews",
+            reviews: reviewsItems,
+          });
+      
+          return res.status(200).json({
+            success: true,
+            message: "Reviews successfully saved",
+          });
+        } catch (error) {
+          return res.status(500).json({
+            success: false
+          });
+        }
       }
-
+      
       res.status(200).json({
         success: true,
         message: "Layout created successfully",
