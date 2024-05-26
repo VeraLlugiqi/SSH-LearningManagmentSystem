@@ -12,27 +12,16 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import axios from "axios";
 
-
-
-//upload 
-export const uploadCourse = CatchAsyncError(async (req:Request, res: Response, next:NextFunction)=>{
-    try{
-        const data = req.body;
-        const thumbnail = data.thumbnail;
-        if(thumbnail && thumbnail.url){
-          const myCloud = await cloudinary.v2.uploader.upload(thumbnail.url,{
-            folder:"courses"
-            });
-
-            data.thumbnail = {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url
-            }
-        }
-        createCourse(data,res,next);
-    }
-
-
+// upload course
+export const uploadCourse = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = req.body;
+      const thumbnail = data.thumbnail;
+      if (thumbnail) {
+        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+          folder: "courses",
+        });
 
         data.thumbnail = {
           public_id: myCloud.public_id,
@@ -56,9 +45,9 @@ export const editCourse = CatchAsyncError(
 
       const courseId = req.params.id;
 
-      const courseData = (await CourseModel.findById(courseId)) as any;
+      const courseData = await CourseModel.findById(courseId) as any;
 
-      if (typeof thumbnail === 'string' && !thumbnail.startsWith("https")) {
+      if (thumbnail && !thumbnail.startsWith("https")) {
         await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
@@ -71,7 +60,7 @@ export const editCourse = CatchAsyncError(
         };
       }
 
-      if (typeof thumbnail === 'string' && thumbnail.startsWith("https")) {
+      if (thumbnail.startsWith("https")) {
         data.thumbnail = {
           public_id: courseData?.thumbnail.public_id,
           url: courseData?.thumbnail.url,
@@ -275,10 +264,8 @@ export const addAnwser = CatchAsyncError(
         updatedAt: new Date().toISOString(),
       };
 
-
-    //add this answer to our course content 
-    question.questionReplies.push(newAnswer);
-
+      // add this answer to our course content
+      question.questionReplies.push(newAnswer);
 
       await course?.save();
 
@@ -311,6 +298,7 @@ export const addAnwser = CatchAsyncError(
           return next(new ErrorHandler(error.message, 500));
         }
       }
+
       res.status(200).json({
         success: true,
         course,
@@ -379,6 +367,7 @@ export const addReview = CatchAsyncError(
         message: `${req.user?.name} has given a review in ${course?.name}`,
       });
 
+
       res.status(200).json({
         success: true,
         course,
@@ -426,7 +415,7 @@ export const addReplyToReview = CatchAsyncError(
       }
 
       review.commentReplies?.push(replyData);
-
+      
       await course?.save();
 
       await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 7days

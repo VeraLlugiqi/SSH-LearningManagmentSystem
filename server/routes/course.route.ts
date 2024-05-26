@@ -6,7 +6,7 @@ import {
   getAllCourses,
   getCourseByUser,
   addQuestion,
-  addAnswer,
+  addAnwser,
   addReview,
   addReplyToReview,
   deleteCourse,
@@ -57,7 +57,7 @@ courseRouter.put(
   addQuestion
 );
 
-courseRouter.put("/add-answer", updateAccessToken, isAutheticated, addAnswer);
+courseRouter.put("/add-answer", updateAccessToken, isAutheticated, addAnwser);
 
 courseRouter.put(
   "/add-review/:id",
