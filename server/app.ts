@@ -11,6 +11,8 @@ import orderRouter from "./routes/order.route";
 import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
+import  swaggerUi from 'swagger-ui-express'
+import * as swaggerDocument from './swagger.json'
 //body parser
 
 app.use(express.json({limit:"50mb"}));
@@ -38,6 +40,8 @@ app.get("/test",(req:Request,res:Response,next:NextFunction)=>{
     });
     
 });
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //unknown route
 

@@ -1,0 +1,2238 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.0",
+        "title": "ELearning",
+        "description": "CRUD style API in NodeJs using Swagger",
+        "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/v1"
+        }
+    ],
+    "tags":[
+        {
+        "name":"User",
+        "description":"API for users"     
+        },
+        {
+        "name":"Courses",
+        "description":"API for courses"
+        },
+        
+        {
+        "name":"Order",
+        "description":"API for orders"
+        },
+        {
+        "name":"Notification",
+        "description":"API for notifications"
+        },
+        {
+        "name":"Layout",
+        "description":"API for layouts"
+        },
+        {
+        "name":"Analytics",
+        "description":"API for analytics"
+        }
+    ],
+    "paths": {
+        "/registration": {
+            "post": {
+                "summary": "Register a new user",
+                "tags": ["User"],
+                "security": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please check your email: john.doe@example.com to activate your account!"
+                                        },
+                                        "activationToken": {
+                                            "type": "string",
+                                            "example": "example_token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid user data or email already exists"
+                    }
+                }
+            }
+        },
+        "/activate-user": {
+            "post": {
+                "summary": "Activate a user",
+                "tags": ["User"],
+                "security": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["activation_token", "activation_code"],
+                                "properties": {
+                                    "activation_token": {
+                                        "type": "string",
+                                        "description": "The activation token of the user",
+                                        "example": "example_token"
+                                    },
+                                    "activation_code": {
+                                        "type": "string",
+                                        "description": "The activation code of the user",
+                                        "example": "example_code"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "User activated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid activation data or email already exists"
+                    }
+                }
+            }
+        },  
+        "/login": {
+            "post": {
+                "summary": "Log in a user",
+                "tags": ["User"],
+                "security": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["email", "password"],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "The email of the user",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "description": "The password of the user",
+                                        "example": "password123"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "example_token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid email or password"
+                    }
+                }
+            }
+        }, 
+        "/logout": {
+            "get": {
+                "summary": "Log out a user",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while logging out"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/me": {
+            "get": {
+                "summary": "Get user info",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "User info retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while retrieving user info"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/social-auth": {
+            "post": {
+                "summary": "Authenticate a user via social media",
+                "tags": ["User"],
+                "security": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["email", "name", "avatar"],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "The email of the user",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The name of the user",
+                                        "example": "John Doe"
+                                    },
+                                    "avatar": {
+                                        "type": "string",
+                                        "description": "The avatar URL of the user",
+                                        "example": "http://example.com/avatar.jpg"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "User authenticated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "example_token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid user data"
+                    }
+                }
+            }
+        },
+        "/update-user-info": {
+            "put": {
+                "summary": "Update user info",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The new name of the user",
+                                        "example": "John Doe"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "User info updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while updating user info"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }, 
+        "/update-user-password": {
+            "put": {
+                "summary": "Update user password",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["oldPassword", "newPassword"],
+                                "properties": {
+                                    "oldPassword": {
+                                        "type": "string",
+                                        "description": "The old password of the user",
+                                        "example": "oldPassword123"
+                                    },
+                                    "newPassword": {
+                                        "type": "string",
+                                        "description": "The new password of the user",
+                                        "example": "newPassword123"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Password updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password updated successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Old password is incorrect or error occurred while updating password"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/update-user-avatar": {
+            "put": {
+                "summary": "Update user avatar",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["avatar"],
+                                "properties": {
+                                    "avatar": {
+                                        "type": "string",
+                                        "description": "The new avatar URL of the user",
+                                        "example": "http://example.com/avatar.jpg"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Avatar updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while updating avatar"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/get-users": {
+            "get": {
+                "summary": "Get all users",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "Users retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while retrieving users"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/update-user": {
+            "put": {
+                "summary": "Update user role",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["email", "role"],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "The email of the user",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "description": "The new role of the user",
+                                        "example": "admin"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "User role updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while updating user role or user not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/delete-user/{id}": {
+            "delete": {
+                "summary": "Delete a user",
+                "tags": ["User"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User deleted successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error occurred while deleting user"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+    
+    
+    
+    
+    "/create-course": {
+            "post": {
+                "summary": "Create a new course",
+                "tags": ["Courses"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Course created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Course"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid course data"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+    },
+    "/edit-course/{id}": {
+        "put": {
+            "summary": "Edit an existing course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the course to edit",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Course"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "Course updated successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/get-course/{id}": {
+        "get": {
+        "summary": "Get a single course by ID",
+        "tags": ["Courses"],
+        "parameters": [
+            {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the course to retrieve",
+            "required": true,
+            "schema": {
+                "type": "string"
+            }
+            }
+        ],
+        "responses": {
+            "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/Course"
+                }
+                }
+            }
+            }
+        }
+        }
+    },
+    "/get-courses": {
+        "get": {
+        "summary": "Get all courses",
+        "tags": ["Courses"],
+        "responses": {
+            "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "array",
+                    "items": {
+                    "$ref": "#/components/schemas/Course"
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+    },
+    "/get-admin-courses": {
+        "get": {
+        "summary": "Get all courses for admin",
+        "tags": ["Courses"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+            "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                    "type": "array",
+                    "items": {
+                    "$ref": "#/components/schemas/Course"
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+    },
+    "/get-course-content/{id}": {
+        "get": {
+        "summary": "Get course content by user",
+        "tags": ["Courses"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+            {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the course to retrieve content",
+            "required": true,
+            "schema": {
+                "type": "string"
+            }
+            }
+        ],
+        "responses": {
+            "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/CourseContent"
+                }
+                }
+            }
+            }
+        }
+        }
+    }, 
+    "/add-question": {
+        "put": {
+            "summary": "Add a question to a course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "The question to add"
+                                },
+                                "courseId": {
+                                    "type": "string",
+                                    "description": "The ID of the course"
+                                },
+                                "contentId": {
+                                    "type": "string",
+                                    "description": "The ID of the content"
+                                }
+                            },
+                            "required": ["question", "courseId", "contentId"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Question added successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid content id"
+                },
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "403": {
+                    "description": "Forbidden"
+                },
+                "500": {
+                    "description": "Server error"
+                }
+            }
+        }
+    },
+    "/add-answer": {
+        "put": {
+            "summary": "Add an answer to a question in a course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "answer": {
+                                    "type": "string",
+                                    "description": "The answer to add"
+                                },
+                                "courseId": {
+                                    "type": "string",
+                                    "description": "The ID of the course"
+                                },
+                                "contentId": {
+                                    "type": "string",
+                                    "description": "The ID of the content"
+                                },
+                                "questionId": {
+                                    "type": "string",
+                                    "description": "The ID of the question"
+                                }
+                            },
+                            "required": ["answer", "courseId", "contentId", "questionId"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Answer added successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid content id or question id"
+                },
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "403": {
+                    "description": "Forbidden"
+                },
+                "500": {
+                    "description": "Server error"
+                }
+            }
+        }
+    },  
+    "/add-review/{id}": {
+        "put": {
+            "summary": "Add a review to a course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the course to add a review to",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "review": {
+                                    "type": "string",
+                                    "description": "The review to add"
+                                },
+                                "rating": {
+                                    "type": "number",
+                                    "description": "The rating for the course"
+                                },
+                                "userId": {
+                                    "type": "string",
+                                    "description": "The ID of the user adding the review"
+                                }
+                            },
+                            "required": ["review", "rating", "userId"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Review added successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid course id"
+                },
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "403": {
+                    "description": "Forbidden"
+                },
+                "404": {
+                    "description": "You are not eligible to access this course"
+                },
+                "500": {
+                    "description": "Server error"
+                }
+            }
+        }
+    },
+    "/add-reply": {
+        "put": {
+            "summary": "Add a reply to a review in a course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "comment": {
+                                    "type": "string",
+                                    "description": "The reply to add"
+                                },
+                                "courseId": {
+                                    "type": "string",
+                                    "description": "The ID of the course"
+                                },
+                                "reviewId": {
+                                    "type": "string",
+                                    "description": "The ID of the review"
+                                }
+                            },
+                            "required": ["comment", "courseId", "reviewId"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "Reply added successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid course id or review id"
+                },
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "403": {
+                    "description": "Forbidden"
+                },
+                "404": {
+                    "description": "Course not found or Review not found"
+                },
+                "500": {
+                    "description": "Server error"
+                }
+            }
+        }
+    },
+    "/getVdoCipherOTP": {
+        "post": {
+            "summary": "Generate a VdoCipher OTP for a video",
+            "tags": ["Courses"],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "videoId": {
+                                    "type": "string",
+                                    "description": "The ID of the video"
+                                }
+                            },
+                            "required": ["videoId"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "OTP generated successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "otp": {
+                                        "type": "string",
+                                        "description": "The generated OTP"
+                                    },
+                                    "playbackInfo": {
+                                        "type": "object",
+                                        "description": "Additional playback information"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid video id or server error"
+                }
+            }
+        }
+    },
+    "/delete-course/{id}": {
+        "delete": {
+            "summary": "Delete a course",
+            "tags": ["Courses"],
+            "security": [{"bearerAuth": []}],
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the course to delete",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Course deleted successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "success": {
+                                        "type": "boolean",
+                                        "description": "Indicates the success of the operation"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "description": "A message about the result of the operation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid course id or server error"
+                },
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "403": {
+                    "description": "Forbidden"
+                },
+                "404": {
+                    "description": "Course not found"
+                }
+            }
+        }
+    },
+    "/create-order": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Create a new order",
+                "description": "Creates a new order for a course",
+                "operationId": "createOrder",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-orders": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get all orders",
+                "description": "Retrieves all orders. Only accessible to admin users.",
+                "operationId": "getAllOrders",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of all orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/get-all-notifications": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all notifications",
+                "description": "Retrieves all notifications. Only accessible to admin users.",
+                "operationId": "getAllNotifications",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of all notifications",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/NotificationResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/update-notification/{id}": {
+            "put": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Update notification status",
+                "description": "Updates the status of a notification to 'read'. Only accessible to admin users.",
+                "operationId": "updateNotification",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The ID of the notification to update",
+                        "example": "60d21b4667d0d8992e610c85"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "notifications": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/NotificationResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notification not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-users-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get users analytics",
+                "description": "Retrieves analytics data for users. Only accessible to admin users.",
+                "operationId": "getUsersAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of users for the month",
+                                                        "example": 150
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-orders-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get order analytics",
+                "description": "Retrieves analytics data for orders. Only accessible to admin users.",
+                "operationId": "getOrderAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Orders analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "orders": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of orders for the month",
+                                                        "example": 200
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-courses-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get courses analytics",
+                "description": "Retrieves analytics data for courses. Only accessible to admin users.",
+                "operationId": "getCoursesAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "courses": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of courses for the month",
+                                                        "example": 150
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/create-layout": {
+            "post": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Create a new layout",
+                "description": "Creates a new layout. Only accessible to admin users.",
+                "operationId": "createLayout",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Layout"
+                            },
+                            "examples": {
+                                "CategoriesExample": {
+                                    "summary": "A Categories layout example",
+                                    "value": {
+                                        "type": "Categories",
+                                        "categories": [
+                                            {
+                                                "title": "Programming"
+                                            },
+                                            {
+                                                "title": "Digital Marketing"
+                                            },
+                                            {
+                                                "title": "Graphic Design"
+                                            },
+                                            {
+                                                "title": "Machine Learning"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Layout created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Layout created successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/edit-layout": {
+            "put": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Edit an existing layout",
+                "description": "Edits an existing layout. Only accessible to admin users.",
+                "operationId": "editLayout",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Layout"
+                            },
+                            "examples": {
+                                "CategoriesExample": {
+                                    "summary": "A Categories layout example",
+                                    "value": {
+                                        "type": "Categories",
+                                        "categories": [
+                                            {
+                                                "title": "Programming"
+                                            },
+                                            {
+                                                "title": "Digital Marketing"
+                                            },
+                                            {
+                                                "title": "Graphic Design"
+                                            },
+                                            {
+                                                "title": "Machine Learning"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Layout updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Layout updated successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-layout": {
+            "get": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Get layout by type",
+                "description": "Retrieves a layout by its type.",
+                "operationId": "getLayoutByType",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The type of layout to retrieve",
+                        "example": "Categories"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Layout retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "layout": {
+                                            "$ref": "#/components/schemas/Layout"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+        "User": {
+            "type": "object",
+            "required": ["name", "email", "password"],
+            "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the user",
+                "example": "John Doe"
+            },
+            "email": {
+                "type": "string",
+                "format": "email",
+                "description": "The email of the user",
+                "example": "john.doe@example.com"
+            },
+            "password": {
+                "type": "string",
+                "description": "The password of the user",
+                "example": "password123"
+            },
+            "avatar": {
+                "type": "object",
+                "description": "The avatar of the user",
+                "properties": {
+                "public_id": {
+                    "type": "string",
+                    "description": "The public ID of the avatar",
+                    "example": "sample_public_id"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "The URL of the avatar",
+                    "example": "http://example.com/avatar.jpg"
+                }
+                }
+            },
+            "role": {
+                "type": "string",
+                "description": "The role of the user",
+                "example": "user"
+            },
+            "isVerified": {
+                "type": "boolean",
+                "description": "Indicates if the user is verified",
+                "example": false
+            },
+            "courses": {
+                "type": "array",
+                "description": "The courses associated with the user",
+                "items": {
+                "type": "object",
+                "properties": {
+                    "courseId": {
+                    "type": "string",
+                    "description": "The ID of the course",
+                    "example": "courseId123"
+                    }
+                }
+                }
+            }
+            }
+        },
+        "Order": {
+                "type": "object",
+                "properties": {
+                    "courseId": {
+                        "type": "string",
+                        "description": "The ID of the course to be ordered",
+                        "example": "60d21b4667d0d8992e610c85"
+                    },
+                    "payment_info": {
+                        "type": "object",
+                        "description": "The payment information for the order",
+                        "properties": {
+                            "card_number": {
+                                "type": "string",
+                                "description": "Credit card number",
+                                "example": "4111111111111111"
+                            },
+                            "expiry_date": {
+                                "type": "string",
+                                "description": "Expiry date of the card",
+                                "example": "12/23"
+                            },
+                            "cvv": {
+                                "type": "string",
+                                "description": "Card CVV",
+                                "example": "123"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "courseId",
+                    "payment_info"
+                ]
+            },
+            "OrderResponse": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "description": "The ID of the created order",
+                        "example": "5f8d0d55b54764421b7156c6"
+                    },
+                    "courseId": {
+                        "type": "string",
+                        "description": "The ID of the course",
+                        "example": "60d21b4667d0d8992e610c85"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "The ID of the user",
+                        "example": "60d21b4667d0d8992e610c86"
+                    },
+                    "payment_info": {
+                        "type": "object",
+                        "description": "The payment information for the order",
+                        "properties": {
+                            "card_number": {
+                                "type": "string",
+                                "description": "Credit card number",
+                                "example": "4111111111111111"
+                            },
+                            "expiry_date": {
+                                "type": "string",
+                                "description": "Expiry date of the card",
+                                "example": "12/23"
+                            },
+                            "cvv": {
+                                "type": "string",
+                                "description": "Card CVV",
+                                "example": "123"
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "The status of the order",
+                        "example": "confirmed"
+                    }
+                }
+            },
+        "Notification": {
+            "type": "object",
+            "properties": {
+            "title": {
+                "type": "string",
+                "example": "New Notification"
+            },
+            "message": {
+                "type": "string",
+                "example": "You have a new notification."
+            },
+            "status": {
+                "type": "string",
+                "example": "unread"
+            }
+            }
+        },
+            
+        "FaqItem": {
+            "type": "object",
+            "properties": {
+            "question": {
+                "type": "string",
+                "description": "The question in the FAQ",
+                "example": "What is the return policy?"
+            },
+            "answer": {
+                "type": "string",
+                "description": "The answer to the FAQ question",
+                "example": "You can return items within 30 days."
+            }
+            }
+        },
+        "Category": {
+            "type": "object",
+            "properties": {
+            "title": {
+                "type": "string",
+                "description": "The title of the category",
+                "example": "Technology"
+            }
+            }
+        },
+        "BannerImage": {
+            "type": "object",
+            "properties": {
+            "public_id": {
+                "type": "string",
+                "description": "The public ID of the banner image",
+                "example": "sample_public_id"
+            },
+            "url": {
+                "type": "string",
+                "description": "The URL of the banner image",
+                "example": "http://example.com/banner.jpg"
+            }
+            }
+        },
+       "Layout": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "The type of layout",
+                        "enum": [
+                            "Banner",
+                            "FAQ",
+                            "Categories"
+                        ],
+                        "example": "Banner"
+                    },
+                    "image": {
+                        "type": "string",
+                        "description": "The image URL for the banner layout",
+                        "example": "http://example.com/image.jpg"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title for the banner layout",
+                        "example": "Welcome to our site"
+                    },
+                    "subTitle": {
+                        "type": "string",
+                        "description": "The subtitle for the banner layout",
+                        "example": "We offer the best services"
+                    },
+                    "faq": {
+                        "type": "array",
+                        "description": "The FAQ items for the FAQ layout",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "The question for the FAQ layout",
+                                    "example": "What is your return policy?"
+                                },
+                                "answer": {
+                                    "type": "string",
+                                    "description": "The answer for the FAQ layout",
+                                    "example": "You can return any item within 30 days."
+                                }
+                            }
+                        }
+                    },
+                    "categories": {
+                        "type": "array",
+                        "description": "The categories for the Categories layout",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title for the category layout",
+                                    "example": "Electronics"
+                                }
+                            }
+                        }
+                    }
+                },
+                "oneOf": [
+                    {
+                        "required": [
+                            "type",
+                            "image",
+                            "title",
+                            "subTitle"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "Banner"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "type",
+                            "faq"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "FAQ"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "type",
+                            "categories"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "Categories"
+                            }
+                        }
+                    }
+                ]
+            },
+        "Comment": {
+            "type": "object",
+            "properties": {
+            "user": {
+                "$ref": "#/components/schemas/User"
+            },
+            "question": {
+                "type": "string",
+                "description": "The question posed by the user",
+                "example": "What is the best way to learn JavaScript?"
+            },
+            "questionReplies": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/Comment"
+                }
+            }
+            }
+        },
+        "Review": {
+            "type": "object",
+            "properties": {
+            "user": {
+                "$ref": "#/components/schemas/User"
+            },
+            "rating": {
+                "type": "number",
+                "description": "The rating given by the user",
+                "example": 4
+            },
+            "comment": {
+                "type": "string",
+                "description": "The review comment",
+                "example": "Great course!"
+            },
+            "commentReplies": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/Review"
+                }
+            }
+            }
+        },
+        "Link": {
+            "type": "object",
+            "properties": {
+            "title": {
+                "type": "string",
+                "description": "The title of the link",
+                "example": "Official Documentation"
+            },
+            "url": {
+                "type": "string",
+                "description": "The URL of the link",
+                "example": "http://example.com"
+            }
+            }
+        },
+        "CourseData": {
+            "type": "object",
+            "properties": {
+            "title": {
+                "type": "string",
+                "description": "The title of the course data",
+                "example": "Introduction to Programming"
+            },
+            "description": {
+                "type": "string",
+                "description": "The description of the course data",
+                "example": "This section covers the basics of programming."
+            },
+            "videoUrl": {
+                "type": "string",
+                "description": "The URL of the video",
+                "example": "http://example.com/video.mp4"
+            },
+            "videoThumbnail": {
+                "type": "object",
+                "description": "The thumbnail of the video",
+                "properties": {
+                "public_id": {
+                    "type": "string",
+                    "description": "The public ID of the thumbnail",
+                    "example": "sample_public_id"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "The URL of the thumbnail",
+                    "example": "http://example.com/thumbnail.jpg"
+                }
+                }
+            },
+            "videoSection": {
+                "type": "string",
+                "description": "The section of the video",
+                "example": "Basics"
+            },
+            "videoLength": {
+                "type": "number",
+                "description": "The length of the video in minutes",
+                "example": 30
+            },
+            "videoPlayer": {
+                "type": "string",
+                "description": "The video player used",
+                "example": "HTML5"
+            },
+            "links": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/Link"
+                }
+            },
+            "suggestion": {
+                "type": "string",
+                "description": "Suggestions for further study",
+                "example": "Read the official documentation"
+            },
+            "questions": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/Comment"
+                }
+            }
+            }
+        },
+        "Course": {
+            "type": "object",
+            "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the course",
+                "example": "Learn JavaScript"
+            },
+            "description": {
+                "type": "string",
+                "description": "The description of the course",
+                "example": "A comprehensive guide to JavaScript."
+            },
+            "categories": {
+                "type": "string",
+                "description": "The categories the course belongs to",
+                "example": "Programming"
+            },
+            "price": {
+                "type": "number",
+                "description": "The price of the course",
+                "example": 99.99
+            },
+            "estimatedPrice": {
+                "type": "number",
+                "description": "The estimated price of the course",
+                "example": 120.00
+            },
+            "thumbnail": {
+                "type": "object",
+                "description": "The thumbnail of the course",
+                "properties": {
+                "public_id": {
+                    "type": "string",
+                    "description": "The public ID of the thumbnail",
+                    "example": "sample_public_id"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "The URL of the thumbnail",
+                    "example": "http://example.com/thumbnail.jpg"
+                }
+                }
+            },
+            "tags": {
+                "type": "string",
+                "description": "The tags associated with the course",
+                "example": "JavaScript, Programming"
+            },
+            "level": {
+                "type": "string",
+                "description": "The difficulty level of the course",
+                "example": "Beginner"
+            },
+            "demoUrl": {
+                "type": "string",
+                "description": "The URL of the course demo",
+                "example": "http://example.com/demo"
+            },
+            "benefits": {
+                "type": "array",
+                "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                    "type": "string",
+                    "description": "The title of the benefit",
+                    "example": "Learn the basics"
+                    }
+                }
+                }
+            },
+            "prerequisites": {
+                "type": "array",
+                "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                    "type": "string",
+                    "description": "The title of the prerequisite",
+                    "example": "Basic HTML knowledge"
+                    }
+                }
+                }
+            },
+            "reviews": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/Review"
+                }
+            },
+            "courseData": {
+                "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/CourseData"
+                }
+            },
+            "ratings": {
+                "type": "number",
+                "description": "The overall ratings of the course",
+                "example": 4.5
+            },
+            "purchased": {
+                "type": "number",
+                "description": "The number of times the course has been purchased",
+                "example": 100
+            }
+            }
+        }
+        }
+    }
+    }
+    
