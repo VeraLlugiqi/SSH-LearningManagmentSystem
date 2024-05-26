@@ -12,16 +12,27 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import axios from "axios";
 
-// upload course
-export const uploadCourse = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = req.body;
-      const thumbnail = data.thumbnail;
-      if (thumbnail) {
-        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-          folder: "courses",
-        });
+
+
+//upload 
+export const uploadCourse = CatchAsyncError(async (req:Request, res: Response, next:NextFunction)=>{
+    try{
+        const data = req.body;
+        const thumbnail = data.thumbnail;
+        if(thumbnail && thumbnail.url){
+          const myCloud = await cloudinary.v2.uploader.upload(thumbnail.url,{
+            folder:"courses"
+            });
+
+            data.thumbnail = {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url
+            }
+        }
+        createCourse(data,res,next);
+    }
+
+
 
         data.thumbnail = {
           public_id: myCloud.public_id,
@@ -47,7 +58,7 @@ export const editCourse = CatchAsyncError(
 
       const courseData = (await CourseModel.findById(courseId)) as any;
 
-      if (thumbnail && !thumbnail.startsWith("https")) {
+      if (typeof thumbnail === 'string' && !thumbnail.startsWith("https")) {
         await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
@@ -60,7 +71,7 @@ export const editCourse = CatchAsyncError(
         };
       }
 
-      if (thumbnail.startsWith("https")) {
+      if (typeof thumbnail === 'string' && thumbnail.startsWith("https")) {
         data.thumbnail = {
           public_id: courseData?.thumbnail.public_id,
           url: courseData?.thumbnail.url,
@@ -264,8 +275,10 @@ export const addAnwser = CatchAsyncError(
         updatedAt: new Date().toISOString(),
       };
 
-      // add this answer to our course content
-      question.questionReplies.push(newAnswer);
+
+    //add this answer to our course content 
+    question.questionReplies.push(newAnswer);
+
 
       await course?.save();
 
