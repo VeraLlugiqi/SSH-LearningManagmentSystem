@@ -1129,15 +1129,570 @@
                 }
             }
         }
-    }
-    
-    
-    
-    
-
-    
-    
-    
+    },
+    "/create-order": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Create a new order",
+                "description": "Creates a new order for a course",
+                "operationId": "createOrder",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-orders": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get all orders",
+                "description": "Retrieves all orders. Only accessible to admin users.",
+                "operationId": "getAllOrders",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of all orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/get-all-notifications": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all notifications",
+                "description": "Retrieves all notifications. Only accessible to admin users.",
+                "operationId": "getAllNotifications",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of all notifications",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/NotificationResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/update-notification/{id}": {
+            "put": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Update notification status",
+                "description": "Updates the status of a notification to 'read'. Only accessible to admin users.",
+                "operationId": "updateNotification",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The ID of the notification to update",
+                        "example": "60d21b4667d0d8992e610c85"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "notifications": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/NotificationResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notification not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-users-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get users analytics",
+                "description": "Retrieves analytics data for users. Only accessible to admin users.",
+                "operationId": "getUsersAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of users for the month",
+                                                        "example": 150
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-orders-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get order analytics",
+                "description": "Retrieves analytics data for orders. Only accessible to admin users.",
+                "operationId": "getOrderAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Orders analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "orders": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of orders for the month",
+                                                        "example": 200
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-courses-analytics": {
+            "get": {
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get courses analytics",
+                "description": "Retrieves analytics data for courses. Only accessible to admin users.",
+                "operationId": "getCoursesAnalytics",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses analytics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "courses": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "month": {
+                                                        "type": "string",
+                                                        "description": "The month for the analytics data",
+                                                        "example": "January"
+                                                    },
+                                                    "count": {
+                                                        "type": "integer",
+                                                        "description": "The number of courses for the month",
+                                                        "example": 150
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/create-layout": {
+            "post": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Create a new layout",
+                "description": "Creates a new layout. Only accessible to admin users.",
+                "operationId": "createLayout",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Layout"
+                            },
+                            "examples": {
+                                "CategoriesExample": {
+                                    "summary": "A Categories layout example",
+                                    "value": {
+                                        "type": "Categories",
+                                        "categories": [
+                                            {
+                                                "title": "Programming"
+                                            },
+                                            {
+                                                "title": "Digital Marketing"
+                                            },
+                                            {
+                                                "title": "Graphic Design"
+                                            },
+                                            {
+                                                "title": "Machine Learning"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Layout created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Layout created successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/edit-layout": {
+            "put": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Edit an existing layout",
+                "description": "Edits an existing layout. Only accessible to admin users.",
+                "operationId": "editLayout",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Layout"
+                            },
+                            "examples": {
+                                "CategoriesExample": {
+                                    "summary": "A Categories layout example",
+                                    "value": {
+                                        "type": "Categories",
+                                        "categories": [
+                                            {
+                                                "title": "Programming"
+                                            },
+                                            {
+                                                "title": "Digital Marketing"
+                                            },
+                                            {
+                                                "title": "Graphic Design"
+                                            },
+                                            {
+                                                "title": "Machine Learning"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Layout updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Layout updated successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/get-layout": {
+            "get": {
+                "tags": [
+                    "Layout"
+                ],
+                "summary": "Get layout by type",
+                "description": "Retrieves a layout by its type.",
+                "operationId": "getLayoutByType",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The type of layout to retrieve",
+                        "example": "Categories"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Layout retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "layout": {
+                                            "$ref": "#/components/schemas/Layout"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
     },
     "components": {
         "schemas": {
@@ -1204,29 +1759,86 @@
             }
         },
         "Order": {
-            "type": "object",
-            "required": ["courseId", "userId"],
-            "properties": {
-            "courseId": {
-                "type": "string",
-                "description": "The ID of the course",
-                "example": "courseId123"
-            },
-            "userId": {
-                "type": "string",
-                "description": "The ID of the user",
-                "example": "userId123"
-            },
-            "payment_info": {
                 "type": "object",
-                "description": "Information about the payment",
-                "example": {
-                "method": "credit card",
-                "status": "paid"
+                "properties": {
+                    "courseId": {
+                        "type": "string",
+                        "description": "The ID of the course to be ordered",
+                        "example": "60d21b4667d0d8992e610c85"
+                    },
+                    "payment_info": {
+                        "type": "object",
+                        "description": "The payment information for the order",
+                        "properties": {
+                            "card_number": {
+                                "type": "string",
+                                "description": "Credit card number",
+                                "example": "4111111111111111"
+                            },
+                            "expiry_date": {
+                                "type": "string",
+                                "description": "Expiry date of the card",
+                                "example": "12/23"
+                            },
+                            "cvv": {
+                                "type": "string",
+                                "description": "Card CVV",
+                                "example": "123"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "courseId",
+                    "payment_info"
+                ]
+            },
+            "OrderResponse": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "description": "The ID of the created order",
+                        "example": "5f8d0d55b54764421b7156c6"
+                    },
+                    "courseId": {
+                        "type": "string",
+                        "description": "The ID of the course",
+                        "example": "60d21b4667d0d8992e610c85"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "The ID of the user",
+                        "example": "60d21b4667d0d8992e610c86"
+                    },
+                    "payment_info": {
+                        "type": "object",
+                        "description": "The payment information for the order",
+                        "properties": {
+                            "card_number": {
+                                "type": "string",
+                                "description": "Credit card number",
+                                "example": "4111111111111111"
+                            },
+                            "expiry_date": {
+                                "type": "string",
+                                "description": "Expiry date of the card",
+                                "example": "12/23"
+                            },
+                            "cvv": {
+                                "type": "string",
+                                "description": "Card CVV",
+                                "example": "123"
+                            }
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "The status of the order",
+                        "example": "confirmed"
+                    }
                 }
-            }
-            }
-        },
+            },
         "Notification": {
             "type": "object",
             "properties": {
@@ -1244,6 +1856,7 @@
             }
             }
         },
+            
         "FaqItem": {
             "type": "object",
             "properties": {
@@ -1284,46 +1897,106 @@
             }
             }
         },
-        "Layout": {
-            "type": "object",
-            "properties": {
-            "type": {
-                "type": "string",
-                "description": "The type of layout",
-                "example": "homepage"
-            },
-            "faq": {
-                "type": "array",
-                "items": {
-                "$ref": "#/components/schemas/FaqItem"
-                }
-            },
-            "categories": {
-                "type": "array",
-                "items": {
-                "$ref": "#/components/schemas/Category"
-                }
-            },
-            "banner": {
+       "Layout": {
                 "type": "object",
                 "properties": {
-                "image": {
-                    "$ref": "#/components/schemas/BannerImage"
+                    "type": {
+                        "type": "string",
+                        "description": "The type of layout",
+                        "enum": [
+                            "Banner",
+                            "FAQ",
+                            "Categories"
+                        ],
+                        "example": "Banner"
+                    },
+                    "image": {
+                        "type": "string",
+                        "description": "The image URL for the banner layout",
+                        "example": "http://example.com/image.jpg"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title for the banner layout",
+                        "example": "Welcome to our site"
+                    },
+                    "subTitle": {
+                        "type": "string",
+                        "description": "The subtitle for the banner layout",
+                        "example": "We offer the best services"
+                    },
+                    "faq": {
+                        "type": "array",
+                        "description": "The FAQ items for the FAQ layout",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "The question for the FAQ layout",
+                                    "example": "What is your return policy?"
+                                },
+                                "answer": {
+                                    "type": "string",
+                                    "description": "The answer for the FAQ layout",
+                                    "example": "You can return any item within 30 days."
+                                }
+                            }
+                        }
+                    },
+                    "categories": {
+                        "type": "array",
+                        "description": "The categories for the Categories layout",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title for the category layout",
+                                    "example": "Electronics"
+                                }
+                            }
+                        }
+                    }
                 },
-                "title": {
-                    "type": "string",
-                    "description": "The title of the banner",
-                    "example": "Welcome to our eLearning platform"
-                },
-                "subTitle": {
-                    "type": "string",
-                    "description": "The subtitle of the banner",
-                    "example": "Your journey to knowledge begins here"
-                }
-                }
-            }
-            }
-        },
+                "oneOf": [
+                    {
+                        "required": [
+                            "type",
+                            "image",
+                            "title",
+                            "subTitle"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "Banner"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "type",
+                            "faq"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "FAQ"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "type",
+                            "categories"
+                        ],
+                        "properties": {
+                            "type": {
+                                "const": "Categories"
+                            }
+                        }
+                    }
+                ]
+            },
         "Comment": {
             "type": "object",
             "properties": {
