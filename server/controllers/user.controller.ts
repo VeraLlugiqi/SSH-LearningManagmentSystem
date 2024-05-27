@@ -22,11 +22,24 @@ interface IRegistrationBody {
   email: string;
   password: string;
   avatar?: string;
+  // address?: {
+  //   street: string;
+  //   city: string;
+  //   state: string;
+  //   country: string;
+  //   postalCode: string;
+  // };
+  // phoneNumber?: {
+  //   countryCode: string;
+  //   number: string;
+  // };
 }
 
 export const registrationUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // const { name, email, password, address, phoneNumber } = req.body;
+
       const { name, email, password } = req.body;
 
       const isEmailExist = await userModel.findOne({ email });
@@ -38,6 +51,8 @@ export const registrationUser = CatchAsyncError(
         name,
         email,
         password,
+        // address,
+        // phoneNumber,
       };
 
       const activationToken = createActivationToken(user);
