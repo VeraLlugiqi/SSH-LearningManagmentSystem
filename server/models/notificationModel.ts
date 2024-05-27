@@ -42,8 +42,7 @@ const notificationSchema = new Schema<INotification>({
         required: true
     },
     category: {
-        type: Schema.Types.ObjectId,
-        ref: "Category",
+        type: categorySchema,
         required: true
     }
 },{timestamps: true});

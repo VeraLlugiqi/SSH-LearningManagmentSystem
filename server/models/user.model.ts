@@ -13,6 +13,29 @@ interface IAddress {
   postalCode: string;
 }
 
+const addressSchema: Schema<IAddress> = new Schema({
+  street: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  state: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: true,
+  },
+}, { _id: false });
+
 interface IPhoneNumber {
   countryCode: string;
   number: string;
@@ -86,20 +109,11 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
       },
     ],
     address: {
-      type: {
-        street: String,
-        city: String,
-        state: String,
-        country: String,
-        postalCode: String,
-      },
+      type: addressSchema,
       required: false,
     },
     phoneNumber: {
-      type: {
-        countryCode: String,
-        number: String,
-      },
+      type: phoneNumberSchema,
       required: false,
     },
   },
