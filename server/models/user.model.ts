@@ -4,7 +4,52 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const emailRegexPattern: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+interface IAddress {
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+}
 
+const addressSchema: Schema<IAddress> = new Schema({
+  street: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  state: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: true,
+  },
+}, { _id: false });
+
+interface IPhoneNumber {
+  countryCode: string;
+  number: string;
+}
+
+const phoneNumberSchema: Schema<IPhoneNumber> = new Schema({
+  countryCode: {
+    type: String,
+    required: true,
+  },
+  number: {
+    type: String,
+    required: true,
+  },
+});
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -16,6 +61,8 @@ export interface IUser extends Document {
   role: string;
   isVerified: boolean;
   courses: Array<{ courseId: string }>;
+  address: IAddress;
+  phoneNumber: IPhoneNumber;
   comparePassword: (password: string) => Promise<boolean>;
   SignAccessToken: () => string;
   SignRefreshToken: () => string;
@@ -60,6 +107,14 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
         courseId: String,
       },
     ],
+    address: {
+      type: addressSchema,
+      required: false,
+    },
+    phoneNumber: {
+      type: phoneNumberSchema,
+      required: false,
+    },
   },
   { timestamps: true }
 );
