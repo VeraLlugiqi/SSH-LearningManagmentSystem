@@ -1793,7 +1793,7 @@
                     "payment_info"
                 ]
             },
-            "OrderResponse": {
+        "OrderResponse": {
                 "type": "object",
                 "properties": {
                     "orderId": {
@@ -1856,7 +1856,18 @@
             }
             }
         },
-            
+        "CategoryNotification": {
+            "type": "object",
+            "properties": {
+            "name": {
+            "type": "string"
+            },
+            "description": {
+            "type": "string"
+            }
+        },
+        "required": ["name"]
+        },
         "FaqItem": {
             "type": "object",
             "properties": {
@@ -1897,106 +1908,61 @@
             }
             }
         },
-       "Layout": {
-                "type": "object",
-                "properties": {
-                    "type": {
-                        "type": "string",
-                        "description": "The type of layout",
-                        "enum": [
-                            "Banner",
-                            "FAQ",
-                            "Categories"
-                        ],
-                        "example": "Banner"
-                    },
-                    "image": {
-                        "type": "string",
-                        "description": "The image URL for the banner layout",
-                        "example": "http://example.com/image.jpg"
-                    },
-                    "title": {
-                        "type": "string",
-                        "description": "The title for the banner layout",
-                        "example": "Welcome to our site"
-                    },
-                    "subTitle": {
-                        "type": "string",
-                        "description": "The subtitle for the banner layout",
-                        "example": "We offer the best services"
-                    },
-                    "faq": {
-                        "type": "array",
-                        "description": "The FAQ items for the FAQ layout",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "question": {
-                                    "type": "string",
-                                    "description": "The question for the FAQ layout",
-                                    "example": "What is your return policy?"
-                                },
-                                "answer": {
-                                    "type": "string",
-                                    "description": "The answer for the FAQ layout",
-                                    "example": "You can return any item within 30 days."
-                                }
-                            }
-                        }
-                    },
-                    "categories": {
-                        "type": "array",
-                        "description": "The categories for the Categories layout",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "description": "The title for the category layout",
-                                    "example": "Electronics"
-                                }
-                            }
-                        }
-                    }
-                },
-                "oneOf": [
-                    {
-                        "required": [
-                            "type",
-                            "image",
-                            "title",
-                            "subTitle"
-                        ],
-                        "properties": {
-                            "type": {
-                                "const": "Banner"
-                            }
-                        }
-                    },
-                    {
-                        "required": [
-                            "type",
-                            "faq"
-                        ],
-                        "properties": {
-                            "type": {
-                                "const": "FAQ"
-                            }
-                        }
-                    },
-                    {
-                        "required": [
-                            "type",
-                            "categories"
-                        ],
-                        "properties": {
-                            "type": {
-                                "const": "Categories"
-                            }
-                        }
-                    }
-                ]
+        "ReviewLayout": {
+            "type": "object",
+            "properties": {
+            "name": {
+            "type": "string"
             },
+            "message": {
+            "type": "string"
+            },
+            "position": {
+            "type": "string"
+            }
+        },
+        "required": ["name", "message", "position"]
+        },
+        "Layout": {
+        "type": "object",
+        "properties": {
+            "type": {
+            "type": "string"
+            },
+            "faq": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Faq"
+            }
+            },
+            "categories": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Category"
+            }
+            },
+            "banner": {
+            "type": "object",
+            "properties": {
+                "image": {
+                "$ref": "#/definitions/BannerImage"
+                },
+                "title": {
+                "type": "string"
+                },
+                "subTitle": {
+                "type": "string"
+                }
+            }
+            },
+            "reviews": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Review"
+            }
+            }
+        }
+        },
         "Comment": {
             "type": "object",
             "properties": {
@@ -2015,6 +1981,63 @@
                 }
             }
             }
+        },
+        "Address": {
+        "type": "object",
+        "properties": {
+            "street": {
+            "type": "string"
+            },
+            "city": {
+            "type": "string"
+            },
+            "state": {
+            "type": "string"
+            },
+            "postalCode": {
+            "type": "string"
+            }
+            },
+            "required": ["street", "city", "state", "postalCode"]
+        },
+        "Lesson": {
+        "type": "object",
+        "properties": {
+            "title": {
+            "type": "string"
+            },
+            "description": {
+            "type": "string"
+            },
+            "content": {
+            "type": "string"
+            }
+        },
+        "required": ["title", "description", "content"]
+        },
+        "Certificate": {
+        "type": "object",
+        "properties": {
+            "title": {
+            "type": "string"
+            }
+        },
+        "required": ["title"]
+        },
+        "Feedback": {
+        "type": "object",
+        "properties": {
+            "user": {
+            "type": "string"
+            },
+            "comment": {
+            "type": "string"
+            },
+            "rating": {
+            "type": "number"
+            }
+        },
+        "required": ["user", "comment", "rating"]
         },
         "Review": {
             "type": "object",
@@ -2231,6 +2254,18 @@
                 "example": 100
             }
             }
+        },
+        "PhoneNumber": {
+            "type": "object",
+            "properties": {
+            "countryCode": {
+            "type": "string"
+            },
+            "number": {
+            "type": "string"
+            }
+        },
+        "required": ["countryCode", "number"]
         }
         }
     }
