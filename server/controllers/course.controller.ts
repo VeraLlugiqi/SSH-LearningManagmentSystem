@@ -11,7 +11,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import axios from "axios";
-
+// import { ILesson, ICertificate, IFeedback } from "../models/course.model";
 // upload course
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +28,9 @@ export const uploadCourse = CatchAsyncError(
           url: myCloud.secure_url,
         };
       }
+        // const lessons: ILesson[] = data.lessons;
+        // const certificates: ICertificate[] = data.certificates;
+        // const feedbacks: IFeedback[] = data.feedbacks;
       createCourse(data, res, next);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
