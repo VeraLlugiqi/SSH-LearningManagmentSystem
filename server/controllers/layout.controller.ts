@@ -56,8 +56,43 @@ export const createLayout = CatchAsyncError(
           type: "Categories",
           categories: categoriesItems,
         });
+      }else if (type === "Reviews") {
+        const { reviews } = req.body;
+
+        // Validate reviews
+        if (!reviews || !Array.isArray(reviews)) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid input: reviews must be a defined array",
+          });
+        }
+
+        try {
+          const reviewsItems = await Promise.all(
+            reviews.map((item) => ({
+              name: item.name,
+              message: item.message,
+              position: item.position,
+            }))
+          );
+
+          await LayoutModel.create({
+            type: "Reviews",
+            reviews: reviewsItems,
+          });
+
+          return res.status(200).json({
+            success: true,
+            message: "Reviews successfully saved",
+          });
+        } catch (error) {
+          return res.status(500).json({
+            success: false
+          });
+        }
       }
 
+      
       res.status(200).json({
         success: true,
         message: "Layout created successfully",
@@ -133,6 +168,22 @@ export const editLayout = CatchAsyncError(
           await LayoutModel.findByIdAndUpdate(categoriesData?._id, {
             type: "Categories",
             categories: categoriesItems,
+          });
+        }else if (type === "Reviews") {
+          const { reviews } = req.body;
+          const reviewsData = await LayoutModel.findOne({
+            type: "Reviews",
+          });
+          const reviewsItems = await Promise.all(
+            reviews.map((item: any) => ({
+              name: item.name,
+              message: item.message,
+              position: item.position,
+            }))
+          );
+          await LayoutModel.findByIdAndUpdate(reviewsData?._id, {
+            type: "Reviews",
+            reviews: reviewsItems,
           });
         }
   
