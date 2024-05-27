@@ -57,7 +57,7 @@ expect(res.body).toHaveProperty('success', true);
 it('should return 400 status for invalid activation code', async () => {
 const user = {
     name: 'Test User',
-    email: 'vera.llugiqi@student.uni-pr.edu',
+    email: 'vera.llugiqi@outlook.com',
     password: '12345678'
 };
 

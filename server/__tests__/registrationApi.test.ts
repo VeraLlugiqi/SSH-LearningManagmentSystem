@@ -30,7 +30,7 @@ const res = await request(app)
     .post('/api/v1/registration')
     .send({
     name: 'Test kUser',
-    email: 'vera.llugiqi@student.uni-pr.edu',
+    email: 'vera.llugiqi@outlook.com',
     password: '12345678'
     });
 
@@ -44,7 +44,7 @@ it('should return 400 status for duplicate email', async () => {
 await request(app)
     .post('/registration')
     .send({
-    name: 'Test kUser',
+    name: 'Vera kUser',
     email: 'vera.llugiqi@outlook.com',
     password: 'password123'
     });
@@ -52,8 +52,8 @@ await request(app)
 const res = await request(app)
     .post('/api/v1/registration')
     .send({
-    name: 'Test kUser',
-    email: 'vera.llugiqi@student.uni-pr.edu',
+    name: 'Vera kUser',
+    email: 'vera.llugiqi@outlook.com',
     password: '12345678'
     });
 
