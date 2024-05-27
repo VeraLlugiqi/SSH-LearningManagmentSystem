@@ -18,6 +18,16 @@ interface IPhoneNumber {
   number: string;
 }
 
+const phoneNumberSchema: Schema<IPhoneNumber> = new Schema({
+  countryCode: {
+    type: String,
+    required: true,
+  },
+  number: {
+    type: String,
+    required: true,
+  },
+});
 export interface IUser extends Document {
   name: string;
   email: string;
