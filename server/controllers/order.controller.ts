@@ -18,8 +18,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { courseId, payment_info } = req.body as IOrder;
-
+      const {courseId,payment_info,shippingAddress,billingAddress} = req.body as IOrder;
       if (payment_info) {
         if ("id" in payment_info) {
           const paymentIntentId = payment_info.id;
@@ -55,6 +54,8 @@ export const createOrder = CatchAsyncError(
         courseId: course._id,
         userId: user?._id,
         payment_info,
+        shippingAddress,
+        billingAddress
       };
 
       const mailData = {
